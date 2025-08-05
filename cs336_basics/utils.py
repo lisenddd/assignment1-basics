@@ -1,0 +1,9 @@
+import torch.nn as nn
+
+def init_linear_weights(weights: nn.Parameter):
+    out_features, in_features = weights.shape
+    std = 2 / (out_features + in_features)
+    nn.init.trunc_normal_(weights, 0, std, a=-3.0 * std, b=3.0 * std)
+
+def init_embedding_weights(embedding_weights: nn.Parameter):
+    nn.init.trunc_normal_(embedding_weights, 0, 1, a=-3.0, b=3.0)
