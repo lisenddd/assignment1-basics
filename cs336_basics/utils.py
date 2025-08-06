@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 
 def init_linear_weights(weights: nn.Parameter):
@@ -7,3 +8,6 @@ def init_linear_weights(weights: nn.Parameter):
 
 def init_embedding_weights(embedding_weights: nn.Parameter):
     nn.init.trunc_normal_(embedding_weights, 0, 1, a=-3.0, b=3.0)
+
+def silu(x: torch.Tensor) -> torch.Tensor:
+    return x * torch.sigmoid(x)
