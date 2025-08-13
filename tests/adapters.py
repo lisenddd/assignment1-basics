@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from typing import IO, Any, BinaryIO
 from collections.abc import Iterable
+from cs336_basics.attention import scaled_dot_product_attention
 from cs336_basics.utils import stable_softmax
 from jaxtyping import Float, Int
 
@@ -10,9 +11,10 @@ import numpy.typing as npt
 import torch
 from torch import Tensor
 
-from cs336_basics.linear import Linear,Swiglu
+from cs336_basics.linear import Linear, Swiglu
 from cs336_basics.embedding import Embedding, RotaryPositionalEmbedding
 from cs336_basics.norm import RMSNorm
+
 
 def run_linear(
     d_in: int,
@@ -112,7 +114,7 @@ def run_scaled_dot_product_attention(
     Returns:
         Float[Tensor, " ... queries d_v"]: Output of SDPA
     """
-    raise NotImplementedError
+    return scaled_dot_product_attention(Q, K, V, mask)
 
 
 def run_multihead_self_attention(
@@ -463,7 +465,9 @@ def run_cross_entropy(
     raise NotImplementedError
 
 
-def run_gradient_clipping(parameters: Iterable[torch.nn.Parameter], max_l2_norm: float) -> None:
+def run_gradient_clipping(
+    parameters: Iterable[torch.nn.Parameter], max_l2_norm: float
+) -> None:
     """Given a set of parameters, clip their combined gradients to have l2 norm at most max_l2_norm.
 
     Args:
