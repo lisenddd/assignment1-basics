@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from typing import IO, Any, BinaryIO
 from collections.abc import Iterable
+from cs336_basics.utils import stable_softmax
 from jaxtyping import Float, Int
 
 import numpy.typing as npt
@@ -441,7 +442,7 @@ def run_softmax(in_features: Float[Tensor, " ..."], dim: int) -> Float[Tensor, "
         Float[Tensor, "..."]: Tensor of with the same shape as `in_features` with the output of
         softmax normalizing the specified `dim`.
     """
-    raise NotImplementedError
+    return stable_softmax(in_features, dim)
 
 
 def run_cross_entropy(

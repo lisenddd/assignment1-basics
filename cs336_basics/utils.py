@@ -11,3 +11,7 @@ def init_embedding_weights(embedding_weights: nn.Parameter):
 
 def silu(x: torch.Tensor) -> torch.Tensor:
     return x * torch.sigmoid(x)
+
+def stable_softmax(x: torch.Tensor, dim: int) -> torch.Tensor:
+    shift_x = x - torch.max(x, dim=dim, keepdim=True)[0]
+    return shift_x.exp() / shift_x.exp().sum(dim=dim, keepdim=True)
