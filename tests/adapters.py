@@ -3,7 +3,10 @@ from __future__ import annotations
 import os
 from typing import IO, Any, BinaryIO
 from collections.abc import Iterable
-from cs336_basics.attention import scaled_dot_product_attention
+from cs336_basics.attention import (
+    CausalMultiHeadSelfAttention,
+    scaled_dot_product_attention,
+)
 from cs336_basics.utils import stable_softmax
 from jaxtyping import Float, Int
 
@@ -148,7 +151,16 @@ def run_multihead_self_attention(
         Float[Tensor, " ... sequence_length d_out"]: Tensor with the output of running your optimized, batched multi-headed attention
         implementation with the given QKV projection weights and input features.
     """
-    raise NotImplementedError
+    causal_multi_head_attention = CausalMultiHeadSelfAttention(d_model, num_heads)
+    causal_multi_head_attention.load_state_dict(
+        {
+            "q_proj_weight.weights": q_proj_weight,
+            "k_proj_weight.weights": k_proj_weight,
+            "v_proj_weight.weights": v_proj_weight,
+            "o_proj_weight.weights": o_proj_weight,
+        }
+    )
+    return causal_multi_head_attention(in_features)
 
 
 def run_multihead_self_attention_with_rope(
@@ -188,7 +200,18 @@ def run_multihead_self_attention_with_rope(
         Float[Tensor, " ... sequence_length d_out"]: Tensor with the output of running your optimized, batched multi-headed attention
         implementation with the given QKV projection weights and input features.
     """
-    raise NotImplementedError
+    causal_multi_head_attention = CausalMultiHeadSelfAttention(
+        d_model, num_heads, theta, max_seq_len
+    )
+    causal_multi_head_attention.load_state_dict(
+        {
+            "q_proj_weight.weights": q_proj_weight,
+            "k_proj_weight.weights": k_proj_weight,
+            "v_proj_weight.weights": v_proj_weight,
+            "o_proj_weight.weights": o_proj_weight,
+        }
+    )
+    return causal_multi_head_attention(in_features, token_positions)
 
 
 def run_rope(
